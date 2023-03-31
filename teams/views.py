@@ -7,7 +7,7 @@ from .utils import data_processing
 
 
 class teamView(APIView): 
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         teams = Team.objects.all()
 
         teams_list = []
@@ -18,11 +18,12 @@ class teamView(APIView):
 
         return Response(teams_list, status.HTTP_200_OK)
     
-    def post(self, request: Request) -> Request:
+    def post(self, request: Request) -> Response:
         try:
             data_processing(request.data)
             new_team = Team.objects.create(**request.data)
-            return Response(model_to_dict(new_team), status.HTTP_201_CREATED)
+            new_team_dict = model_to_dict(new_team)
+            return Response(new_team_dict, status.HTTP_201_CREATED)
         
         except Exception as Error: 
             return Response({"error": str(Error)}, status.HTTP_400_BAD_REQUEST)
