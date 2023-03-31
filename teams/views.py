@@ -36,7 +36,8 @@ class TeamDetailView(APIView):
             team = Team.objects.get(id=team_id)
         
         except Team.DoesNotExist:
-            return Response({"message": "Team not found"}, status.HTTP_404_NOT_FOUND)
+            return Response({"message": "Team not found"}, 
+                            status.HTTP_404_NOT_FOUND)
 
         team_dict = model_to_dict(team)
         return Response(team_dict, status.HTTP_200_OK)
@@ -47,7 +48,8 @@ class TeamDetailView(APIView):
             team = Team.objects.get(id=team_id)
         
         except Team.DoesNotExist:
-            return Response({"message": "Team not found"}, status.HTTP_404_NOT_FOUND)
+            return Response({"message": "Team not found"}, 
+                            status.HTTP_404_NOT_FOUND)
         
         for key, value in data.items():
             setattr(team, key, value)
@@ -62,7 +64,8 @@ class TeamDetailView(APIView):
             team = Team.objects.get(id=team_id)
         
         except Team.DoesNotExist:
-            return Response({"message": "Team not found"}, status.HTTP_404_NOT_FOUND)
+            return Response({"message": "Team not found"}, 
+                            status.HTTP_404_NOT_FOUND)
         
         team.delete()
 
