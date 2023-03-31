@@ -23,7 +23,47 @@ class teamView(APIView):
             data_processing(request.data)
             new_team = Team.objects.create(**request.data)
             new_team_dict = model_to_dict(new_team)
+
             return Response(new_team_dict, status.HTTP_201_CREATED)
         
         except Exception as Error: 
             return Response({"error": str(Error)}, status.HTTP_400_BAD_REQUEST)
+
+
+class TeamDetailView(APIView):
+    def get(self, request: Request, team_id) -> Response:
+        try:
+            team = Team.objects.get(id=team_id)
+        
+        except Team.DoesNotExist:
+            return Response({"message": "Team not found"}, status.HTTP_404_NOT_FOUND)
+
+        team_dict = model_to_dict(team)
+        return Response(team_dict, status.HTTP_200_OK)
+
+    def patch(self, request: Request, team_id) -> Response:
+        try:
+            data = request.data
+            team = Team.objects.get(id=team_id)
+        
+        except Team.DoesNotExist:
+            return Response({"message": "Team not found"}, status.HTTP_404_NOT_FOUND)
+        
+        for key, value in data.items():
+            setattr(team, key, value)
+            team.save()
+
+            team_dict = model_to_dict(team)
+
+        return Response(team_dict, status.HTTP_200_OK)
+    
+    def delete(self, request: Request, team_id) -> Response:
+        try:
+            team = Team.objects.get(id=team_id)
+        
+        except Team.DoesNotExist:
+            return Response({"message": "Team not found"}, status.HTTP_404_NOT_FOUND)
+        
+        team.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
