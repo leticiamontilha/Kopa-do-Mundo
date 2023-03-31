@@ -51,9 +51,9 @@ class TeamDetailView(APIView):
         
         for key, value in data.items():
             setattr(team, key, value)
-            team.save()
-
-            team_dict = model_to_dict(team)
+        
+        team.save()
+        team_dict = model_to_dict(team)
 
         return Response(team_dict, status.HTTP_200_OK)
     
